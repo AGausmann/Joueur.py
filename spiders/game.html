@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Game &#8212; Python 3 Joueur Client Docs</title>
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GameObject" href="game_object.html" />
+    <link rel="prev" title="Cutter" href="cutter.html" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="shortcut icon" type="image/png" href="../_static/favicon.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=0.8">
+    
+    
+
+  </head><body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
+        <li><a href="../index.html">Python 3 Joueur Client Docs</a> &#187;</li>
+          <li><a href="index.html" accesskey="U">Spiders</a> &#187;</li> 
+      </ul>
+    </div>
+    
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-games.spiders.game">
+<span id="game"></span><h1>Game<a class="headerlink" href="#module-games.spiders.game" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="games.spiders.game.Game">
+<em class="property">class </em><code class="descclassname">games.spiders.game.</code><code class="descname">Game</code><a class="headerlink" href="#games.spiders.game.Game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">joueur.base_game.BaseGame</span></code></p>
+<p>The class representing the Game in the Spiders game.</p>
+<p>There’s an infestation of enemy spiders challenging your queen broodmother spider! Protect her and attack the other broodmother in this turn based, node based, game.</p>
+<dl class="attribute">
+<dt id="games.spiders.game.Game.current_player">
+<code class="descname">current_player</code><a class="headerlink" href="#games.spiders.game.Game.current_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>The player whose turn it is currently. That player can send commands. Other players cannot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="player.html#games.spiders.player.Player" title="games.spiders.player.Player">games.spiders.player.Player</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.current_turn">
+<code class="descname">current_turn</code><a class="headerlink" href="#games.spiders.game.Game.current_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current turn number, starting at 0 for the first player’s turn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.cut_speed">
+<code class="descname">cut_speed</code><a class="headerlink" href="#games.spiders.game.Game.cut_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The speed at which Cutters work to do cut Webs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.eggs_scalar">
+<code class="descname">eggs_scalar</code><a class="headerlink" href="#games.spiders.game.Game.eggs_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant used to calculate how many eggs BroodMothers get on their owner’s turns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.game_objects">
+<code class="descname">game_objects</code><a class="headerlink" href="#games.spiders.game.Game.game_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mapping of every game object’s ID to the actual game object. Primarily used by the server and client to easily refer to the game objects via ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict[str, <a class="reference internal" href="game_object.html#games.spiders.game_object.GameObject" title="games.spiders.game_object.GameObject">games.spiders.game_object.GameObject</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.spiders.game.Game.get_game_object">
+<code class="descname">get_game_object</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#games.spiders.game.Game.get_game_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the game object with the given id, or None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">BaseGameObject in the game with the given id, or None if not found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.initial_web_strength">
+<code class="descname">initial_web_strength</code><a class="headerlink" href="#games.spiders.game.Game.initial_web_strength" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting strength for Webs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.max_turns">
+<code class="descname">max_turns</code><a class="headerlink" href="#games.spiders.game.Game.max_turns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of turns before the game will automatically end.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.movement_speed">
+<code class="descname">movement_speed</code><a class="headerlink" href="#games.spiders.game.Game.movement_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The speed at which Spiderlings move on Webs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.nests">
+<code class="descname">nests</code><a class="headerlink" href="#games.spiders.game.Game.nests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Every Nest in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="nest.html#games.spiders.nest.Nest" title="games.spiders.nest.Nest">games.spiders.nest.Nest</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.players">
+<code class="descname">players</code><a class="headerlink" href="#games.spiders.game.Game.players" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all the players in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="player.html#games.spiders.player.Player" title="games.spiders.player.Player">games.spiders.player.Player</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.session">
+<code class="descname">session</code><a class="headerlink" href="#games.spiders.game.Game.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique identifier for the game instance that is being played.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.spit_speed">
+<code class="descname">spit_speed</code><a class="headerlink" href="#games.spiders.game.Game.spit_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The speed at which Spitters work to spit new Webs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.weave_power">
+<code class="descname">weave_power</code><a class="headerlink" href="#games.spiders.game.Game.weave_power" title="Permalink to this definition">¶</a></dt>
+<dd><p>How much web strength is added or removed from Webs when they are weaved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.weave_speed">
+<code class="descname">weave_speed</code><a class="headerlink" href="#games.spiders.game.Game.weave_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The speed at which Weavers work to do strengthens and weakens on Webs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.spiders.game.Game.webs">
+<code class="descname">webs</code><a class="headerlink" href="#games.spiders.game.Game.webs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Every Web in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="web.html#games.spiders.web.Web" title="games.spiders.web.Web">games.spiders.web.Web</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="sidebar-anchor"></a>
+    
+
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../anarchy/index.html">Anarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catastrophe/index.html">Catastrophe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../checkers/index.html">Checkers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chess/index.html">Chess</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pirates/index.html">Pirates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../saloon/index.html">Saloon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Spiders</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#rules">Rules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#classes">Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ai.html">AI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brood_mother.html">BroodMother</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cutter.html">Cutter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="game_object.html">GameObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nest.html">Nest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="player.html">Player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spider.html">Spider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spiderling.html">Spiderling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spitter.html">Spitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="weaver.html">Weaver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Web</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#other-notes">Other Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../stumped/index.html">Stumped</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cutter.html"
+                        title="previous chapter">Cutter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="game_object.html"
+                        title="next chapter">GameObject</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/spiders/game.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="game_object.html" title="GameObject"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cutter.html" title="Cutter"
+             accesskey="P">previous</a> |</li>
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SIG-GAME.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

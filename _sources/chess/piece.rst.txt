@@ -1,0 +1,9 @@
+Piece
+=====
+
+.. currentmodule:: games.chess.piece
+
+.. automodule:: games.chess.piece
+   :members:
+   :inherited-members:
+   :show-inheritance:

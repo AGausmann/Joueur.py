@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Cowboy &#8212; Python 3 Joueur Client Docs</title>
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Furnishing" href="furnishing.html" />
+    <link rel="prev" title="Bottle" href="bottle.html" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="shortcut icon" type="image/png" href="../_static/favicon.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=0.8">
+    
+    
+
+  </head><body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
+        <li><a href="../index.html">Python 3 Joueur Client Docs</a> &#187;</li>
+          <li><a href="index.html" accesskey="U">Saloon</a> &#187;</li> 
+      </ul>
+    </div>
+    
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-games.saloon.cowboy">
+<span id="cowboy"></span><h1>Cowboy<a class="headerlink" href="#module-games.saloon.cowboy" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="games.saloon.cowboy.Cowboy">
+<em class="property">class </em><code class="descclassname">games.saloon.cowboy.</code><code class="descname">Cowboy</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="game_object.html#games.saloon.game_object.GameObject" title="games.saloon.game_object.GameObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">games.saloon.game_object.GameObject</span></code></a></p>
+<p>The class representing the Cowboy in the Saloon game.</p>
+<p>A person on the map that can move around and interact within the saloon.</p>
+<dl class="method">
+<dt id="games.saloon.cowboy.Cowboy.act">
+<code class="descname">act</code><span class="sig-paren">(</span><em>tile</em>, <em>drunkDirection=''</em><span class="sig-paren">)</span><a class="headerlink" href="#games.saloon.cowboy.Cowboy.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does their job’s action on a Tile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tile</strong> (<a class="reference internal" href="tile.html#games.saloon.tile.Tile" title="games.saloon.tile.Tile"><em>games.saloon.tile.Tile</em></a>) – The Tile you want this Cowboy to act on.</li>
+<li><strong>drunk_direction</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The direction the bottle will cause drunk cowboys to be in, can be ‘North’, ‘East’, ‘South’, or ‘West’.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the act worked, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.can_move">
+<code class="descname">can_move</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.can_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the Cowboy can be moved this turn via its owner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.drunk_direction">
+<code class="descname">drunk_direction</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.drunk_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The direction this Cowboy is moving while drunk. Will be ‘North’, ‘East’, ‘South’, or ‘West’ when drunk; or ‘’ (empty string) when not drunk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.focus">
+<code class="descname">focus</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>How much focus this Cowboy has. Different Jobs do different things with their Cowboy’s focus.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.game_object_name">
+<code class="descname">game_object_name</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.game_object_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>String representing the top level Class that this game object is an instance of. Used for reflection to create new instances on clients, but exposed for convenience should AIs want this data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.health">
+<code class="descname">health</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.health" title="Permalink to this definition">¶</a></dt>
+<dd><p>How much health this Cowboy currently has.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.id">
+<code class="descname">id</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique id for each instance of a GameObject or a sub class. Used for client and server communication. Should never change value after being set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.is_dead">
+<code class="descname">is_dead</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.is_dead" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this Cowboy is dead and has been removed from the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.is_drunk">
+<code class="descname">is_drunk</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.is_drunk" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this Cowboy is drunk, and will automatically walk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.job">
+<code class="descname">job</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.job" title="Permalink to this definition">¶</a></dt>
+<dd><p>The job that this Cowboy does, and dictates how they fight and interact within the Saloon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.saloon.cowboy.Cowboy.log">
+<code class="descname">log</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#games.saloon.cowboy.Cowboy.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a message to this GameObject’s logs. Intended for your own debugging purposes, as strings stored here are saved in the gamelog.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>str</em>) – A string to add to this GameObject’s log. Intended for debugging.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.logs">
+<code class="descname">logs</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any strings logged will be stored here. Intended for debugging.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.saloon.cowboy.Cowboy.move">
+<code class="descname">move</code><span class="sig-paren">(</span><em>tile</em><span class="sig-paren">)</span><a class="headerlink" href="#games.saloon.cowboy.Cowboy.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves this Cowboy from its current Tile to an adjacent Tile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tile</strong> (<a class="reference internal" href="tile.html#games.saloon.tile.Tile" title="games.saloon.tile.Tile"><em>games.saloon.tile.Tile</em></a>) – The Tile you want to move this Cowboy to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the move worked, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.owner">
+<code class="descname">owner</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Player that owns and can control this Cowboy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="player.html#games.saloon.player.Player" title="games.saloon.player.Player">games.saloon.player.Player</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.saloon.cowboy.Cowboy.play">
+<code class="descname">play</code><span class="sig-paren">(</span><em>piano</em><span class="sig-paren">)</span><a class="headerlink" href="#games.saloon.cowboy.Cowboy.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sits down and plays a piano.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>piano</strong> (<a class="reference internal" href="furnishing.html#games.saloon.furnishing.Furnishing" title="games.saloon.furnishing.Furnishing"><em>games.saloon.furnishing.Furnishing</em></a>) – The Furnishing that is a piano you want to play.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the play worked, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.tile">
+<code class="descname">tile</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tile that this Cowboy is located on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="tile.html#games.saloon.tile.Tile" title="games.saloon.tile.Tile">games.saloon.tile.Tile</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.tolerance">
+<code class="descname">tolerance</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many times this unit has been drunk before taking their siesta and reseting this to 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.saloon.cowboy.Cowboy.turns_busy">
+<code class="descname">turns_busy</code><a class="headerlink" href="#games.saloon.cowboy.Cowboy.turns_busy" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many turns this unit has remaining before it is no longer busy and can <cite>act()</cite> or <cite>play()</cite> again.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="sidebar-anchor"></a>
+    
+
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../anarchy/index.html">Anarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catastrophe/index.html">Catastrophe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../checkers/index.html">Checkers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chess/index.html">Chess</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pirates/index.html">Pirates</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Saloon</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#rules">Rules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#classes">Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ai.html">AI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bottle.html">Bottle</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Cowboy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="furnishing.html">Furnishing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="game.html">Game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="game_object.html">GameObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="player.html">Player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile.html">Tile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="young_gun.html">YoungGun</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#other-notes">Other Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../spiders/index.html">Spiders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stumped/index.html">Stumped</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bottle.html"
+                        title="previous chapter">Bottle</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="furnishing.html"
+                        title="next chapter">Furnishing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/saloon/cowboy.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="furnishing.html" title="Furnishing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bottle.html" title="Bottle"
+             accesskey="P">previous</a> |</li>
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SIG-GAME.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

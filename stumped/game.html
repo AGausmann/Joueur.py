@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Game &#8212; Python 3 Joueur Client Docs</title>
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GameObject" href="game_object.html" />
+    <link rel="prev" title="Beaver" href="beaver.html" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="shortcut icon" type="image/png" href="../_static/favicon.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=0.8">
+    
+    
+
+  </head><body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
+        <li><a href="../index.html">Python 3 Joueur Client Docs</a> &#187;</li>
+          <li><a href="index.html" accesskey="U">Stumped</a> &#187;</li> 
+      </ul>
+    </div>
+    
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-games.stumped.game">
+<span id="game"></span><h1>Game<a class="headerlink" href="#module-games.stumped.game" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="games.stumped.game.Game">
+<em class="property">class </em><code class="descclassname">games.stumped.game.</code><code class="descname">Game</code><a class="headerlink" href="#games.stumped.game.Game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">joueur.base_game.BaseGame</span></code></p>
+<p>The class representing the Game in the Stumped game.</p>
+<p>Gather branches and build up your lodge as beavers fight to survive.</p>
+<dl class="attribute">
+<dt id="games.stumped.game.Game.beavers">
+<code class="descname">beavers</code><a class="headerlink" href="#games.stumped.game.Game.beavers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Every Beaver in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="beaver.html#games.stumped.beaver.Beaver" title="games.stumped.beaver.Beaver">games.stumped.beaver.Beaver</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.current_player">
+<code class="descname">current_player</code><a class="headerlink" href="#games.stumped.game.Game.current_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>The player whose turn it is currently. That player can send commands. Other players cannot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="player.html#games.stumped.player.Player" title="games.stumped.player.Player">games.stumped.player.Player</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.current_turn">
+<code class="descname">current_turn</code><a class="headerlink" href="#games.stumped.game.Game.current_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current turn number, starting at 0 for the first player’s turn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.free_beavers_count">
+<code class="descname">free_beavers_count</code><a class="headerlink" href="#games.stumped.game.Game.free_beavers_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a Player has less Beavers than this number, then recruiting other Beavers is free.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.game_objects">
+<code class="descname">game_objects</code><a class="headerlink" href="#games.stumped.game.Game.game_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mapping of every game object’s ID to the actual game object. Primarily used by the server and client to easily refer to the game objects via ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict[str, <a class="reference internal" href="game_object.html#games.stumped.game_object.GameObject" title="games.stumped.game_object.GameObject">games.stumped.game_object.GameObject</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.stumped.game.Game.get_game_object">
+<code class="descname">get_game_object</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#games.stumped.game.Game.get_game_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the game object with the given id, or None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">BaseGameObject in the game with the given id, or None if not found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="games.stumped.game.Game.get_tile_at">
+<code class="descname">get_tile_at</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#games.stumped.game.Game.get_tile_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the Tile at a specified (x, y) position
+:param x: integer between 0 and the mapWidth
+:type x: int
+:param y: integer between 0 and the mapHeight
+:type y: int</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the Tile at (x, y) or None if out of bounds</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="tile.html#games.stumped.tile.Tile" title="games.stumped.tile.Tile">games.stumped.tile.Tile</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.jobs">
+<code class="descname">jobs</code><a class="headerlink" href="#games.stumped.game.Game.jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>All the Jobs that Beavers can have in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="job.html#games.stumped.job.Job" title="games.stumped.job.Job">games.stumped.job.Job</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.lodge_cost_constant">
+<code class="descname">lodge_cost_constant</code><a class="headerlink" href="#games.stumped.game.Game.lodge_cost_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant number used to calculate what it costs to spawn a new lodge.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.lodges_to_win">
+<code class="descname">lodges_to_win</code><a class="headerlink" href="#games.stumped.game.Game.lodges_to_win" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many lodges must be owned by a Player at once to win the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.map_height">
+<code class="descname">map_height</code><a class="headerlink" href="#games.stumped.game.Game.map_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of Tiles in the map along the y (vertical) axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.map_width">
+<code class="descname">map_width</code><a class="headerlink" href="#games.stumped.game.Game.map_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of Tiles in the map along the x (horizontal) axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.max_turns">
+<code class="descname">max_turns</code><a class="headerlink" href="#games.stumped.game.Game.max_turns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of turns before the game will automatically end.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.players">
+<code class="descname">players</code><a class="headerlink" href="#games.stumped.game.Game.players" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of all the players in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="player.html#games.stumped.player.Player" title="games.stumped.player.Player">games.stumped.player.Player</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.session">
+<code class="descname">session</code><a class="headerlink" href="#games.stumped.game.Game.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique identifier for the game instance that is being played.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.spawner">
+<code class="descname">spawner</code><a class="headerlink" href="#games.stumped.game.Game.spawner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Every Spawner in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="spawner.html#games.stumped.spawner.Spawner" title="games.stumped.spawner.Spawner">games.stumped.spawner.Spawner</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.spawner_harvest_constant">
+<code class="descname">spawner_harvest_constant</code><a class="headerlink" href="#games.stumped.game.Game.spawner_harvest_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant number used to calculate how many branches/food Beavers harvest from Spawners.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.spawner_types">
+<code class="descname">spawner_types</code><a class="headerlink" href="#games.stumped.game.Game.spawner_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>All the types of Spawners in the game.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="games.stumped.game.Game.tiles">
+<code class="descname">tiles</code><a class="headerlink" href="#games.stumped.game.Game.tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>All the tiles in the map, stored in Row-major order. Use <cite>x + y * mapWidth</cite> to access the correct index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[<a class="reference internal" href="tile.html#games.stumped.tile.Tile" title="games.stumped.tile.Tile">games.stumped.tile.Tile</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="sidebar-anchor"></a>
+    
+
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../anarchy/index.html">Anarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../catastrophe/index.html">Catastrophe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../checkers/index.html">Checkers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chess/index.html">Chess</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pirates/index.html">Pirates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../saloon/index.html">Saloon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiders/index.html">Spiders</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Stumped</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#rules">Rules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#classes">Classes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ai.html">AI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="beaver.html">Beaver</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="game_object.html">GameObject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="job.html">Job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="player.html">Player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spawner.html">Spawner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile.html">Tile</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#other-notes">Other Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="beaver.html"
+                        title="previous chapter">Beaver</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="game_object.html"
+                        title="next chapter">GameObject</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/stumped/game.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="game_object.html" title="GameObject"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="beaver.html" title="Beaver"
+             accesskey="P">previous</a> |</li>
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SIG-GAME.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

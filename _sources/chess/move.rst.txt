@@ -1,0 +1,9 @@
+Move
+====
+
+.. currentmodule:: games.chess.move
+
+.. automodule:: games.chess.move
+   :members:
+   :inherited-members:
+   :show-inheritance:
