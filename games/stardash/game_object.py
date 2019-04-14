@@ -55,6 +55,7 @@ class GameObject(BaseGameObject):
         Args:
             message (str): A string to add to this GameObject's log. Intended for debugging.
         """
+        print('{}: {}'.format(self, message))
         return self._run_on_server('log', message=message)
 
     # <<-- Creer-Merge: functions -->> - Code you add between this comment and the end comment will be preserved between Creer re-runs.
