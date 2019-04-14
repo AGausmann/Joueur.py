@@ -154,7 +154,16 @@ class AI(BaseAI):
     def move_safe(self, unit, target, max_distance=0):
         if unit.is_dashable(target.x, target.y):
             return self.move_toward(unit, target, max_distance)
-        pass # Unimplemented
+        return unit.move(
+            unit.x + (
+                (unit.y - self.sun.y) 
+                * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
+            ),
+            unit.y + (
+                (self.sun.x - unit.x)
+                * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
+            ),
+        )
 
     def game_updated(self):
         """ This is called every time the game's state updates, so if you are
