@@ -11,7 +11,7 @@ MINER = 4
 
 # Unit ratio definitions (in index order)
 MAX_UNITS = 80
-NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ]
+NORMAL_RATIOS = [ 0.5, 0, 0, 1, 1 ]
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
 # Miner assignment ratio [ minerals, VP ]
@@ -415,6 +415,46 @@ class AI(BaseAI):
             )
 
         log ('    {} transports', len(transports))
+
+        log('Corvette phase')
+
+        corvettes = units[CORVETTE]
+
+        log('    {} corvettes', len(corvettes))
+
+        # For now, all corvettes are tasked with maintaining control of the
+        # VP asteroid.
+
+        # Farthest away get to choose first.
+        corvettes.sort(
+            key=lambda cv: distance(cv, vp_asteroid),
+            reverse=True,
+        )
+
+        for cv in corvettes:
+            projectiles = self.player.opponent.projectiles
+
+            targets = [
+                e for e in self.player.opponent.units
+                if distance(cv, e) < cv.job.range + cv.moves
+            ]
+
+            if projectiles:
+                projectiles.sort(key=lambda p: distance(p, cv))
+                target = projectiles[0]
+                if self.move_safe(cv, target, cv.job.range, 0.8):
+                    cv.shootdown(target)
+
+            elif targets:
+                targets.sort(
+                    key=lambda e: (e.energy, -distance(e, cv))
+                )
+                target = targets[0]
+                if self.move_safe(cv, target, cv.job.range, 0.8):
+                    cv.attack(target)
+
+            else:
+                self.move_safe(cv, vp_asteroid, 0, 0.8)
 
         return True
 
