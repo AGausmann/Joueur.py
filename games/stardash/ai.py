@@ -10,7 +10,7 @@ TRANSPORT = 3
 MINER = 4
 
 # Unit ratio definitions (in index order)
-MAX_UNITS = 20;
+MAX_UNITS = 100
 NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ] 
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
@@ -18,6 +18,11 @@ NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 MINER_RATIOS = [ 1, 2 ]
 MINER_RATIOS = [x / sum(MINER_RATIOS) for x in MINER_RATIOS]
 
+# Asteroids are always on the move. Be one step ahead:
+LOOK_AHEAD = 1
+
+# Ranking from least to greatest rarity:
+ORE_RANK = ['genarium', 'rarium', 'legendarium']
 
 # Skip logging for competition:
 DEBUG = False
@@ -45,8 +50,7 @@ def transfer(unit, src, src_distance, go, take, dest, dest_distance, come, give)
         if go():
             take()
     else:
-        if come():
-            give()
+        if come(): give()
 
 
 class AI(BaseAI):
@@ -69,7 +73,7 @@ class AI(BaseAI):
         return self._player
 
     def get_name(self):
-        """ This is the name you send to the server so your AI will control the
+        """ Tis is the name you send to the server so your AI will control the
             player named this string.
 
         Returns
@@ -100,6 +104,19 @@ class AI(BaseAI):
 
         self.unit_ratios = NORMAL_RATIOS
 
+        # Waypoints for pathing dashes around the Sun.
+        self.wnx = self.sun.x
+        self.wny = self.sun.y + self.belt_max_radius
+
+        self.wex = self.sun.x + self.belt_max_radius
+        self.wey = self.sun.y
+ 
+        self.wsx = self.sun.x
+        self.wsy = self.sun.y - self.belt_max_radius
+        
+        self.wwx = self.sun.x - self.belt_max_radius
+        self.wwy = self.sun.y
+
     def job_id(self, job):
         id_map = {
             'corvette': CORVETTE,
@@ -123,7 +140,7 @@ class AI(BaseAI):
 
     def collides(self, x1, y1, x2, y2):
         length = dist(x1, y1, x2, y2);
-        min_dist = self.sun.radius + self.game.ship_radius + 1e-4;
+        min_dist = self.sun.radius + self.game.ship_radius + 1;
 
         a = (y1 - y2)
         b = (x2 - x1)
@@ -152,54 +169,52 @@ class AI(BaseAI):
     def local_safe(self, unit, x, y):
         return dist(x, y, self.sun.x, self.sun.y) < self.sun.radius + self.game.ship_radius + 1e-4
 
-    def move_toward(self, unit, target, max_distance=0, energy_cap=0.5):
-        target_distance = distance(unit, target)
-        #log('unit {} {}', unit.x, unit.y)
-        #log('target {} {}', target.x, target.y)
-        #log('distance {} -> {}', target_distance, max_distance)
+    def move_toward(self, unit, x, y, max_distance=0, energy_cap=0.5):
+        target_distance = dist(unit.x, unit.y, x, y)
         if target_distance <= max_distance:
             return True
 
-        dest_x = target.x - (target.x - unit.x) * (max_distance - 1e-4) / target_distance
-        dest_y = target.y - (target.y - unit.y) * (max_distance - 1e-4) / target_distance
+        dest_x = x - (x - unit.x) * (max_distance - 1e-4) / target_distance
+        dest_y = y - (y - unit.y) * (max_distance - 1e-4) / target_distance
 
-        if target_distance - max_distance > unit.moves:
+        if target_distance - max_distance > unit.moves - 1e-4:
             if (
                 unit.energy - (
                     (target_distance - max_distance)
                     * self.game.dash_cost / self.game.dash_distance
                 ) > energy_cap * unit.job.energy
             ):
-                assert unit.dash(dest_x, dest_y)
+                unit.dash(dest_x, dest_y)
                 return False
             else:
                 dest_x = unit.x + (
-                    (target.x - unit.x) * max(0, unit.moves - 1e-4) / target_distance
+                    (x - unit.x) * max(0, unit.moves - 1e-4) / target_distance
                 )
                 dest_y = unit.y + (
-                    (target.y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
+                    (y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
                 )
-
-        if self.local_safe(unit, dest_x, dest_y):
-            assert unit.move(dest_x, dest_y)
-        return distance(unit, target) <= max_distance
+        if dest_x != unit.x or dest_y != unit.y:
+            unit.move(dest_x, dest_y)
+        return dist(unit.x, unit.y, x, y) <= max_distance
 
     def move_safe(self, unit, target, max_distance=0, energy_cap=0.5):
-        if self.local_is_dashable(unit, target.x, target.y):
+        target_x = target.x
+        target_y = target.y
+        if self.local_is_dashable(unit, target_x, target_y):
             # Straight line does not cross Sun.
-            return self.move_toward(unit, target, max_distance, energy_cap)
+            return self.move_toward(unit, target_x, target_y, max_distance, energy_cap)
 
-        if self.move_toward(unit, self.sun, self.belt_radius, energy_cap):
-            assert unit.move(
-                unit.x + (
-                    (unit.y - self.sun.y) 
-                    * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
-                ),
-                unit.y + (
-                    (self.sun.x - unit.x)
-                    * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
-                ),
-            )
+        if unit.y > self.game.size_y / 2:
+            if self.local_is_dashable(unit, self.wnx, self.wny):
+                self.move_toward(unit, self.wnx, self.wny, 0, energy_cap)
+            else: 
+                self.move_toward(unit, unit.x, self.wny, 0, energy_cap)
+        else:
+            if self.local_is_dashable(unit, self.wsx, self.wsy):
+                self.move_toward(unit, self.wsx, self.wsy, 0, energy_cap)
+            else:
+                self.move_toward(unit, unit.x, self.wsy, 0, energy_cap)
+
         return False
 
     def game_updated(self):
@@ -227,6 +242,7 @@ class AI(BaseAI):
 
         log()
         log('----- BEGIN TURN {} ----', self.game.current_turn)
+        log('    V{} ${}', self.player.victory_points, self.player.money)
 
 
         # Spawn ships to get close to ratio with the resources available.
@@ -260,7 +276,7 @@ class AI(BaseAI):
 
             log('    Spawning {} ({})', worst_id, self.job_name(worst_id))
 
-            assert self.player.home_base.spawn(
+            self.player.home_base.spawn(
                 self.player.home_base.x,
                 self.player.home_base.y,
                 self.job_name(worst_id),
@@ -293,16 +309,24 @@ class AI(BaseAI):
             def mine():
                 in_range = [
                     a for a in minerals
-                    if distance(a, miner) <= miner.job.range
+                    if distance(a, miner) <= miner.moves - 1e-4
+                    and a.amount > 0
                 ]
+                in_range.sort(
+                    key=lambda a: (-ORE_RANK.index(a.material_type), distance(a, miner)),
+                )
+
                 if in_range:
-                    miner.mine(in_range[0])
+                    target = in_range[0]
+
+                    self.move_toward(miner, target.x, target.y, 0, 1.0)
+                    miner.mine(target)
 
             transfer(
                 miner,
                 self.sun,
                 self.belt_radius,
-                lambda: self.move_toward(miner, self.sun, self.belt_radius),
+                lambda: self.move_toward(miner, self.sun.x, self.sun.y, self.belt_radius),
                 lambda: mine(),
                 self.planet,
                 self.planet.radius,
@@ -315,7 +339,7 @@ class AI(BaseAI):
                 transfer(
                     miner,
                     vp_asteroid,
-                    10,
+                    0,
                     lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
                     lambda: miner.mine(vp_asteroid),
                     self.planet,
@@ -357,7 +381,7 @@ class AI(BaseAI):
                 t,
                 target_miner[0],
                 10,
-                lambda: self.move_safe(t, target_miner[0], 10),
+                lambda: self.move_safe(t, target_miner[0]),
                 lambda: grab(),
                 self.planet,
                 self.planet.radius,
