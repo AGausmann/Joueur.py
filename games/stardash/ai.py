@@ -189,11 +189,7 @@ class AI(BaseAI):
             # Straight line does not cross Sun.
             return self.move_toward(unit, target, max_distance, energy_cap)
 
-        if distance(unit, self.sun) > self.belt_min_radius:
-            # Get closer to the Sun to optimze wraparound maneuver
-            self.move_toward(unit, self.sun, self.belt_min_radius, energy_cap)
-        else:
-            # Perform maneuver by moving perpendicular to the radial.
+        if self.move_toward(unit, self.sun, self.belt_radius, energy_cap):
             assert unit.move(
                 unit.x + (
                     (unit.y - self.sun.y) 
@@ -319,7 +315,7 @@ class AI(BaseAI):
                 transfer(
                     miner,
                     vp_asteroid,
-                    miner.job.range,
+                    10,
                     lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
                     lambda: miner.mine(vp_asteroid),
                     self.planet,
