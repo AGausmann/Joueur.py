@@ -6,7 +6,7 @@ dependencies:
 	pip3.7 install -U -r requirements.txt
 
 core:
-	python3.7 -m compileall -x '_creer' ./
+	python3.7 -m compileall -x '_creer|\.git' ./
 
 clean:
 	find . -type f -name '*.pyc' -delete
