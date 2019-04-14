@@ -11,7 +11,7 @@ MINER = 4
 
 # Unit ratio definitions (in index order)
 MAX_UNITS = 100
-NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ] 
+NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ]
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
 # Miner assignment ratio [ minerals, VP ]
@@ -23,6 +23,11 @@ LOOK_AHEAD = 1
 
 # Ranking from least to greatest rarity:
 ORE_RANK = ['genarium', 'rarium', 'legendarium']
+
+# Attack/defense priorities (least to greatest)
+CORVETTE_PRIORITY = []
+MISSLEBOAT_PRIORITY = []
+MARTYR_PRIORITY = []
 
 # Skip logging for competition:
 DEBUG = False
@@ -173,7 +178,6 @@ class AI(BaseAI):
         target_distance = dist(unit.x, unit.y, x, y)
         if target_distance <= max_distance:
             return True
-
         dest_x = x - (x - unit.x) * (max_distance - 1e-4) / target_distance
         dest_y = y - (y - unit.y) * (max_distance - 1e-4) / target_distance
 
@@ -193,9 +197,8 @@ class AI(BaseAI):
                 dest_y = unit.y + (
                     (y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
                 )
-        if dest_x != unit.x or dest_y != unit.y:
-            unit.move(dest_x, dest_y)
-        return dist(unit.x, unit.y, x, y) <= max_distance
+        unit.move(dest_x, dest_y)
+        return abs(dist(unit.x, unit.y, x, y) - max_distance) < 1e-4
 
     def move_safe(self, unit, target, max_distance=0, energy_cap=0.5):
         target_x = target.x
@@ -249,30 +252,25 @@ class AI(BaseAI):
         log('Spawning phase')
         log('    Target ratio: {}', self.unit_ratios)
         while len(self.player.units) < MAX_UNITS:
-            log('    Money left: {}', self.player.money)
-            candidate_jobs = [
-                i for i in range(5)
-                if self.game.jobs[i].unit_cost < self.player.money
-            ]
-
-            log('    Candidates: {}', candidate_jobs)
-
-            if len(candidate_jobs) == 0:
-                break
-
             current_ratios = [0] * 5
             for unit in self.player.units:
                 current_ratios[self.job_id(unit.job)] += 1
             current_ratios = [x / sum(current_ratios) for x in current_ratios]
             log('    Current ratio: {}', current_ratios)
 
-            worst_id = candidate_jobs[0]
+            worst_id = 0
             worst_diff = self.unit_ratios[worst_id] - current_ratios[worst_id]
-            for i in candidate_jobs[1:]:
+            for i in range(1, 5):
                 diff = self.unit_ratios[i] - current_ratios[i]
                 if diff > worst_diff:
                     worst_id = i
                     worst_diff = diff
+
+            log('    Need {}', self.job_name(worst_id))
+            log('    Money left: {}', self.player.money)
+
+            if self.player.money < self.game.jobs[worst_id].unit_cost:
+                break
 
             log('    Spawning {} ({})', worst_id, self.job_name(worst_id))
 
@@ -334,21 +332,22 @@ class AI(BaseAI):
                 lambda: None, # Automatic
             )
 
-        for miner in vp_miners:
-            if miner.energy > 0.5 * miner.job.energy:
-                transfer(
-                    miner,
-                    vp_asteroid,
-                    0,
-                    lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
-                    lambda: miner.mine(vp_asteroid),
-                    self.planet,
-                    self.planet.radius,
-                    lambda: self.move_safe(miner, self.planet, self.planet.radius, 0.4),
-                    lambda: None, # Automatic
-                )
-            else:
-                self.move_safe(miner, self.planet, self.planet.radius, 0.1)
+        if self.game.current_turn >= self.game.orbits_protected:
+            for miner in vp_miners:
+                if miner.energy > 0.6 * miner.job.energy:
+                    transfer(
+                        miner,
+                        vp_asteroid,
+                        0,
+                        lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
+                        lambda: miner.mine(vp_asteroid),
+                        self.planet,
+                        self.planet.radius,
+                        lambda: self.move_safe(miner, self.planet, self.planet.radius, 0.4),
+                        lambda: None, # Automatic
+                    )
+                else:
+                    self.move_safe(miner, self.planet, self.planet.radius, 0.1)
 
 
         log('    {} mineral miners, {} VP miners', len(mineral_miners), len(vp_miners))
