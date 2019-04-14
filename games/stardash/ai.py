@@ -147,7 +147,8 @@ class AI(BaseAI):
                     (target.y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
                 )
 
-        assert unit.move(dest_x, dest_y)
+        if unit.safe(dest_x, dest_y):
+            unit.move(dest_x, dest_y)
         return distance(unit, target) <= max_distance
 
     def move_safe(self, unit, target, max_distance=0):
