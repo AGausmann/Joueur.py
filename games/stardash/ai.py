@@ -11,11 +11,11 @@ MINER = 4
 
 # Unit ratio definitions (in index order)
 MAX_UNITS = 80
-NORMAL_RATIOS = [ 0.5, 0, 0, 1, 1 ]
+NORMAL_RATIOS = [ 0.5, 0, 2, 5, 5 ]
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
 # Miner assignment ratio [ minerals, VP ]
-MINER_RATIOS = [ 1, 2 ]
+MINER_RATIOS = [ 2, 3 ]
 MINER_RATIOS = [x / sum(MINER_RATIOS) for x in MINER_RATIOS]
 
 # Asteroids are always on the move. Be one step ahead:
@@ -308,7 +308,8 @@ class AI(BaseAI):
 
         units = [[] for _i in range(5)]
         for unit in self.player.units:
-            units[self.job_id(unit.job)].append(unit)
+            if unit.energy > 0:
+                units[self.job_id(unit.job)].append(unit)
 
         log('Miner phase')
 
@@ -320,6 +321,10 @@ class AI(BaseAI):
 
         mineral_miners = miners[:num_mineral_miners]
         vp_miners = miners[num_mineral_miners:]
+
+        if self.game.current_turn < self.game.orbits_protected:
+            mineral_miners += vp_miners
+            vp_miners = []
 
         mineral_mining = 0
         mineral_transit = 0
@@ -358,22 +363,21 @@ class AI(BaseAI):
                 lambda: None, # Automatic
             )
 
-        if self.game.current_turn >= self.game.orbits_protected:
-            for miner in vp_miners:
-                if miner.energy > 0.6 * miner.job.energy:
-                    transfer(
-                        miner,
-                        vp_asteroid,
-                        0,
-                        lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
-                        lambda: miner.mine(vp_asteroid),
-                        self.planet,
-                        self.planet.radius,
-                        lambda: self.move_safe(miner, self.planet, self.planet.radius, 0.4),
-                        lambda: None, # Automatic
-                    )
-                else:
-                    self.move_safe(miner, self.planet, self.planet.radius, 0.1)
+        for miner in vp_miners:
+            if miner.energy > 0.6 * miner.job.energy:
+                transfer(
+                    miner,
+                    vp_asteroid,
+                    0,
+                    lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
+                    lambda: miner.mine(vp_asteroid),
+                    self.planet,
+                    self.planet.radius,
+                    lambda: self.move_safe(miner, self.planet, self.planet.radius, 0.4),
+                    lambda: None, # Automatic
+                )
+            else:
+                self.move_safe(miner, self.planet, self.planet.radius, 0.1)
 
 
         log('    {} mineral miners, {} VP miners', len(mineral_miners), len(vp_miners))
@@ -383,36 +387,37 @@ class AI(BaseAI):
         transports = units[TRANSPORT]
         # Transports which are farthest from the nearest miner will take precedence
         # to balance the overall distance traveled.
-        transports.sort(
-            key=lambda t: min(distance(t, m) for m in miners),
-            reverse=True,
-        )
-
-        miner_assignments = [[m, 0] for m in miners]
-
-        for t in transports:
-            target_miner = min(
-                miner_assignments,
-                key=lambda m: (m[1], distance(t, m[0]))
+        if miners:
+            transports.sort(
+                key=lambda t: min(distance(t, m) for m in miners),
+                reverse=True,
             )
-            target_miner[1] += 1
 
-            def grab():
-                for i in reversed(['genarium', 'legendarium', 'rarium', 'mythicite']):
-                    if getattr(target_miner[0], i) > 0:
-                        t.transfer(target_miner[0], -1, i)
+            miner_assignments = [[m, 0] for m in miners]
 
-            transfer(
-                t,
-                target_miner[0],
-                10,
-                lambda: self.move_safe(t, target_miner[0]),
-                lambda: grab(),
-                self.planet,
-                self.planet.radius,
-                lambda: self.move_safe(t, self.planet, self.planet.radius),
-                lambda: None, # Automatic
-            )
+            for t in transports:
+                target_miner = min(
+                    miner_assignments,
+                    key=lambda m: (m[1], distance(t, m[0]))
+                )
+                target_miner[1] += 1
+
+                def grab():
+                    for i in reversed(['genarium', 'legendarium', 'rarium', 'mythicite']):
+                        if getattr(target_miner[0], i) > 0:
+                            t.transfer(target_miner[0], -1, i)
+
+                transfer(
+                    t,
+                    target_miner[0],
+                    10,
+                    lambda: self.move_safe(t, target_miner[0]),
+                    lambda: grab(),
+                    self.planet,
+                    self.planet.radius,
+                    lambda: self.move_safe(t, self.planet, self.planet.radius),
+                    lambda: None, # Automatic
+                )
 
         log ('    {} transports', len(transports))
 
@@ -455,6 +460,25 @@ class AI(BaseAI):
 
             else:
                 self.move_safe(cv, vp_asteroid, 0, 0.8)
+
+        log('Martyr phase')
+
+        martyrs = units[MARTYR]
+
+        log('    {} martyrs', len(martyrs))
+
+        all_units = self.player.units
+
+        for i in range(len(martyrs)):
+            all_units.sort(
+                key=lambda u: u.energy,
+            )
+            target=all_units[0]
+            martyrs.sort(
+                key=lambda m: (-m.moves, distance(m, target))
+            )
+            mt = martyrs[0]
+            self.move_safe(mt, target, mt.job.range, 0.8)
 
         return True
 
