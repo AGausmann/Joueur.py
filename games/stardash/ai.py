@@ -27,9 +27,11 @@ def log(fmt='', *args, **kwargs):
     if DEBUG:
         print(fmt.format(*args, **kwargs))
 
+def dist(xa, ya, xb, yb):
+    return sqrt((xa - xb) ** 2 + (ya - yb) ** 2)
 
 def distance(a, b):
-    return sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+    return dist(a.x, a.y, b.x, b.y)
 
 
 def transfer(unit, src, src_distance, go, take, dest, dest_distance, come, give):
@@ -119,6 +121,37 @@ class AI(BaseAI):
 
         return id_map[job_id]
 
+    def collides(self, x1, y1, x2, y2):
+        length = dist(x1, y1, x2, y2);
+        min_dist = self.sun.radius + self.game.ship_radius + 1e-4;
+
+        a = (y1 - y2)
+        b = (x2 - x1)
+        c = (x1 * y2) - (x2 * y1)
+        if a == 0 and b == 0:
+            d = float('Inf')
+        else:
+            d = abs((a * self.sun.x) + (b * self.sun.y) + c) / sqrt((a ** 2) + (b ** 2))
+
+        if d <= min_dist:
+            check1 = dist(x1, y1, self.sun.x, self.sun.y) > length
+            check2 = dist(x2, y2, self.sun.x, self.sun.y) > length
+
+            if check1 and dist(x2, y2, self.sun.x, self.sun.y) < min_dist:
+                return True
+            if check2 and dist(x1, y1, self.sun.x, self.sun.y) < min_dist:
+                return True
+            if not check1 and not check2:
+                return True
+
+        return False
+
+    def local_is_dashable(self, unit, x, y):
+        return not self.collides(unit.x, unit.y, x, y)
+
+    def local_safe(self, unit, x, y):
+        return dist(x, y, self.sun.x, self.sun.y) < self.sun.radius + self.game.ship_radius + 1e-4
+
     def move_toward(self, unit, target, max_distance=0):
         target_distance = distance(unit, target)
         #log('unit {} {}', unit.x, unit.y)
@@ -147,12 +180,12 @@ class AI(BaseAI):
                     (target.y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
                 )
 
-        if unit.safe(dest_x, dest_y):
+        if self.local_safe(unit, dest_x, dest_y):
             unit.move(dest_x, dest_y)
         return distance(unit, target) <= max_distance
 
     def move_safe(self, unit, target, max_distance=0):
-        if unit.is_dashable(target.x, target.y):
+        if self.local_is_dashable(unit, target.x, target.y):
             return self.move_toward(unit, target, max_distance)
         return unit.move(
             unit.x + (
