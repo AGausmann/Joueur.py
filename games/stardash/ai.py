@@ -152,7 +152,7 @@ class AI(BaseAI):
     def local_safe(self, unit, x, y):
         return dist(x, y, self.sun.x, self.sun.y) < self.sun.radius + self.game.ship_radius + 1e-4
 
-    def move_toward(self, unit, target, max_distance=0):
+    def move_toward(self, unit, target, max_distance=0, energy_cap=0.5):
         target_distance = distance(unit, target)
         #log('unit {} {}', unit.x, unit.y)
         #log('target {} {}', target.x, target.y)
@@ -168,7 +168,7 @@ class AI(BaseAI):
                 unit.energy - (
                     (target_distance - max_distance)
                     * self.game.dash_cost / self.game.dash_distance
-                ) > 0.5 * unit.job.energy
+                ) > energy_cap * unit.job.energy
             ):
                 assert unit.dash(dest_x, dest_y)
                 return False
@@ -181,22 +181,30 @@ class AI(BaseAI):
                 )
 
         if self.local_safe(unit, dest_x, dest_y):
-            unit.move(dest_x, dest_y)
+            assert unit.move(dest_x, dest_y)
         return distance(unit, target) <= max_distance
 
-    def move_safe(self, unit, target, max_distance=0):
+    def move_safe(self, unit, target, max_distance=0, energy_cap=0.5):
         if self.local_is_dashable(unit, target.x, target.y):
-            return self.move_toward(unit, target, max_distance)
-        return unit.move(
-            unit.x + (
-                (unit.y - self.sun.y) 
-                * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
-            ),
-            unit.y + (
-                (self.sun.x - unit.x)
-                * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
-            ),
-        )
+            # Straight line does not cross Sun.
+            return self.move_toward(unit, target, max_distance, energy_cap)
+
+        if distance(unit, self.sun) > self.belt_min_radius:
+            # Get closer to the Sun to optimze wraparound maneuver
+            self.move_toward(unit, self.sun, self.belt_min_radius, energy_cap)
+        else:
+            # Perform maneuver by moving perpendicular to the radial.
+            assert unit.move(
+                unit.x + (
+                    (unit.y - self.sun.y) 
+                    * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
+                ),
+                unit.y + (
+                    (self.sun.x - unit.x)
+                    * max(0, unit.moves - 1e-4) / distance(unit, self.sun)
+                ),
+            )
+        return False
 
     def game_updated(self):
         """ This is called every time the game's state updates, so if you are
@@ -307,17 +315,21 @@ class AI(BaseAI):
             )
 
         for miner in vp_miners:
-            transfer(
-                miner,
-                vp_asteroid,
-                miner.job.range,
-                lambda: self.move_safe(miner, vp_asteroid, miner.job.range),
-                lambda: miner.mine(vp_asteroid),
-                self.planet,
-                self.planet.radius,
-                lambda: self.move_safe(miner, self.planet, self.planet.radius),
-                lambda: None, # Automatic
-            )
+            if miner.energy > 0.5 * miner.job.energy:
+                transfer(
+                    miner,
+                    vp_asteroid,
+                    miner.job.range,
+                    lambda: self.move_safe(miner, vp_asteroid, miner.job.range, 0.4),
+                    lambda: miner.mine(vp_asteroid),
+                    self.planet,
+                    self.planet.radius,
+                    lambda: self.move_safe(miner, self.planet, self.planet.radius, 0.4),
+                    lambda: None, # Automatic
+                )
+            else:
+                self.move_safe(miner, self.planet, self.planet.radius, 0.1)
+
 
         log('    {} mineral miners, {} VP miners', len(mineral_miners), len(vp_miners))
 
@@ -358,8 +370,6 @@ class AI(BaseAI):
             )
 
         log ('    {} transports', len(transports))
-                
-
 
         return True
 
