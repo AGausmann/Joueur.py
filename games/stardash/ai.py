@@ -10,7 +10,7 @@ TRANSPORT = 3
 MINER = 4
 
 # Unit ratio definitions (in index order)
-MAX_UNITS = 100
+MAX_UNITS = 80
 NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ]
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
@@ -56,6 +56,15 @@ def transfer(unit, src, src_distance, go, take, dest, dest_distance, come, give)
             take()
     else:
         if come(): give()
+
+
+class Point:
+    """
+    Dummy for x,y values
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 
 class AI(BaseAI):
@@ -110,17 +119,28 @@ class AI(BaseAI):
         self.unit_ratios = NORMAL_RATIOS
 
         # Waypoints for pathing dashes around the Sun.
-        self.wnx = self.sun.x
-        self.wny = self.sun.y + self.belt_max_radius
-
-        self.wex = self.sun.x + self.belt_max_radius
-        self.wey = self.sun.y
- 
-        self.wsx = self.sun.x
-        self.wsy = self.sun.y - self.belt_max_radius
-        
-        self.wwx = self.sun.x - self.belt_max_radius
-        self.wwy = self.sun.y
+        self.waypoints = [
+            # 0 North
+            Point(
+                self.sun.x,
+                self.sun.y + self.belt_max_radius,
+            ),
+            # 1 East
+            Point(
+                self.sun.x + self.belt_max_radius,
+                self.sun.y,
+            ),
+            # 2 South
+            Point(
+                self.sun.x,
+                self.sun.y - self.belt_max_radius,
+            ),
+            # 3 West
+            Point(
+                self.sun.x - self.belt_max_radius,
+                self.sun.y,
+            ),
+        ]
 
     def job_id(self, job):
         id_map = {
@@ -144,6 +164,10 @@ class AI(BaseAI):
         return id_map[job_id]
 
     def collides(self, x1, y1, x2, y2):
+        """
+        Check if the given line segment intersects the Sun.
+        (Transcribed from Cerveau)
+        """
         length = dist(x1, y1, x2, y2);
         min_dist = self.sun.radius + self.game.ship_radius + 1;
 
@@ -207,16 +231,18 @@ class AI(BaseAI):
             # Straight line does not cross Sun.
             return self.move_toward(unit, target_x, target_y, max_distance, energy_cap)
 
-        if unit.y > self.game.size_y / 2:
-            if self.local_is_dashable(unit, self.wnx, self.wny):
-                self.move_toward(unit, self.wnx, self.wny, 0, energy_cap)
-            else: 
-                self.move_toward(unit, unit.x, self.wny, 0, energy_cap)
-        else:
-            if self.local_is_dashable(unit, self.wsx, self.wsy):
-                self.move_toward(unit, self.wsx, self.wsy, 0, energy_cap)
-            else:
-                self.move_toward(unit, unit.x, self.wsy, 0, energy_cap)
+        # Wrap around with a waypoint:
+        waypoints = [
+            w for w in self.waypoints
+            if self.local_is_dashable(unit, w.x, w.y)
+        ]
+        waypoints.sort(
+            key=lambda w: distance(w, target),
+        )
+
+        if waypoints:
+            wp = waypoints[0]
+            self.move_toward(unit, wp.x, wp.y, 0, energy_cap)
 
         return False
 
