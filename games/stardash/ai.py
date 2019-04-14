@@ -1,6 +1,6 @@
 from joueur.base_ai import BaseAI
 
-from math import sqrt
+from math import sqrt, ceil
 
 # Index definitions for jobs
 CORVETTE = 0
@@ -10,12 +10,14 @@ TRANSPORT = 3
 MINER = 4
 
 # Unit ratio definitions (in index order)
-NORMAL_RATIOS = [ 1, 1, 1, 2, 1 ] 
+MAX_UNITS = 20;
+NORMAL_RATIOS = [ 0, 0, 0, 1, 1 ] 
 NORMAL_RATIOS = [x / sum(NORMAL_RATIOS) for x in NORMAL_RATIOS]
 
 # Miner assignment ratio [ minerals, VP ]
-MINER_RATIOS = [ 3, 1 ]
+MINER_RATIOS = [ 1, 2 ]
 MINER_RATIOS = [x / sum(MINER_RATIOS) for x in MINER_RATIOS]
+
 
 # Skip logging for competition:
 DEBUG = False
@@ -139,10 +141,10 @@ class AI(BaseAI):
                 return False
             else:
                 dest_x = unit.x + (
-                    (target.x - unit.x) * (unit.moves - 1e-4) / target_distance
+                    (target.x - unit.x) * max(0, unit.moves - 1e-4) / target_distance
                 )
                 dest_y = unit.y + (
-                    (target.y - unit.y) * (unit.moves - 1e-4) / target_distance
+                    (target.y - unit.y) * max(0, unit.moves - 1e-4) / target_distance
                 )
 
         assert unit.move(dest_x, dest_y)
@@ -183,7 +185,7 @@ class AI(BaseAI):
         # Spawn ships to get close to ratio with the resources available.
         log('Spawning phase')
         log('    Target ratio: {}', self.unit_ratios)
-        while True:
+        while len(self.player.units) < MAX_UNITS:
             log('    Money left: {}', self.player.money)
             candidate_jobs = [
                 i for i in range(5)
@@ -227,7 +229,7 @@ class AI(BaseAI):
         minerals = self.game.bodies[4:]
 
         miners = units[MINER]
-        num_mineral_miners = int(MINER_RATIOS[0] * len(miners))
+        num_mineral_miners = ceil(MINER_RATIOS[0] * len(miners))
 
         mineral_miners = miners[:num_mineral_miners]
         vp_miners = miners[num_mineral_miners:]
@@ -286,14 +288,19 @@ class AI(BaseAI):
             reverse=True,
         )
 
-        miner_assignments = [(m, 0) for m in miners]
-        
+        miner_assignments = [[m, 0] for m in miners]
+
         for t in transports:
             target_miner = min(
                 miner_assignments,
-                key=lambda m: (m[1], distance(t, m))
+                key=lambda m: (m[1], distance(t, m[0]))
             )
             target_miner[1] += 1
+
+            def grab():
+                for i in reversed(['genarium', 'legendarium', 'rarium', 'mythicite']):
+                    if getattr(target_miner[0], i) > 0:
+                        t.transfer(target_miner[0], -1, i)
 
             transfer(
                 t,
